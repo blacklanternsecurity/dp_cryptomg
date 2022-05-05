@@ -376,7 +376,6 @@ class Block():
             self.equals_check_3()
 
     def find_baseline(self):
-
         self.parent.msgPrint("Attempting to discover detector byte baseline")
         test_chars = [b'\x00',b'\x6b',b'\x08']
         
@@ -391,7 +390,9 @@ class Block():
                 self.equals_check()
                 return
     
-        self.parent.msgPrint(f"Could not build a working baseline: Is the key non-printable?",style="error")
+        self.parent.msgPrint(f"Could not build a working baseline. Target may not be vulnerable.",style="error")
+        self.parent.msgPrint(f"Try all character mode (-a) if currently in ASCII Printable mode",style="error")
+        sys.exit()
 
 
 class KeyPosition():

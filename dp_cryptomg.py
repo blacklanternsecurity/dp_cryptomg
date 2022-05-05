@@ -9,6 +9,10 @@ from lib.terminalview import *
 import threading
 from queue import Queue
 
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 
 class multiThreadHandler():
     def __init__(self,CO):
