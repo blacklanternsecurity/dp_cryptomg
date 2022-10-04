@@ -37,7 +37,7 @@ class multiThreadHandler():
         t.start()
 
         self.q.put(self.CO)
-    #    self.q.join()
+
         return
 
 
@@ -56,7 +56,6 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--url',  help='Target ID', required = True)
     parser.add_argument('-h', '--help', help ='print the help screen and exit', required = False,action='store_true')
     parser.add_argument('-d', '--debug', help='Enable debugging mode', required = False, action='store_true')
-    parser.add_argument('-a', '--all', help='Enable all 256 possible characters, default is ascii printable', required = False, action='store_true')
     parser.add_argument('-c', '--cookie', help='Add optional cookie header to every request', required = False)
     parser.add_argument('-k', '--known-key', help='The partial or complete known key, in HEX format', required = False)
     parser.add_argument('-v', '--version', help='Specify the Telerik version, if known', required = False)
@@ -105,13 +104,9 @@ if __name__ == '__main__':
     else:
         version = None
 
-    allmode = False
-    if args.all:
-        allmode = True
-
     terminal = TerminalView()
 
-    CO = CryptOMG(debug=debug,url=args.url,handler=handler,cookie=cookie,knownkey=knownkey,version=version,length=keylength,allmode=allmode,terminal=terminal,mthlock=None)
+    CO = CryptOMG(debug=debug,url=args.url,handler=handler,cookie=cookie,knownkey=knownkey,version=version,length=keylength,terminal=terminal,mthlock=None)
     terminal.cryptomg = CO
 
     mth = multiThreadHandler(CO)
@@ -128,10 +123,8 @@ if __name__ == '__main__':
                 if not mth_started:
                     mth.run()
                     mth_started = True
-              #  mth.lock.acquire()
                 keypress = terminal.t.inkey(timeout=0)
                 terminal.initial_draw()
-           #     mth.lock.release()
                 keypress = terminal.t.inkey(timeout=5)
             keypress = ''
             terminal.clear()

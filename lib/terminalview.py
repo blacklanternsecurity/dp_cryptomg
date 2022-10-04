@@ -73,29 +73,25 @@ class TerminalView():
 
         print(self.t.move(4,4) + self.t.white_on_black(self.t.bold('Handler: ')) + self.t.slategray3(self.t.bold(handlerText)))
 
-        if self.cryptomg.allmode:
-            allmodeText = "All Characters"
-        else:
-            allmodeText = "ASCII Printable"
+
 
         if self.cryptomg.cookie: 
             cookieText = self.cryptomg.cookie
         else:
             cookieText = "None"
 
-        print(self.t.move(5,4) + self.t.white_on_black(self.t.bold('Mode: ')) + self.t.slategray3(self.t.bold(allmodeText)))
-        print(self.t.move(6,4) + self.t.white_on_black(self.t.bold('Cookies: ')) + self.t.slategray3(self.t.bold(cookieText)))
+        print(self.t.move(5,4) + self.t.white_on_black(self.t.bold('Cookies: ')) + self.t.slategray3(self.t.bold(cookieText)))
 
         if self.cryptomg.debug:
             debugText = "ENABLED"
         else:
             debugText = "DISABLED"
-        print(self.t.move(7,4) + self.t.white_on_black(self.t.bold('Debug: ')) + self.t.slategray3(self.t.bold(debugText)))
+        print(self.t.move(6,4) + self.t.white_on_black(self.t.bold('Debug: ')) + self.t.slategray3(self.t.bold(debugText)))
 
     def status_draw(self):
 
         # status
-        print(self.t.move(10,4) + self.t.white_on_black(self.t.bold('STATUS:')))
+        print(self.t.move(9,4) + self.t.white_on_black(self.t.bold('STATUS:')))
 
         sk_width = int(self.t.width / 2) - 12
         solved_key_text = b''.join(self.cryptomg.solved_blocks).hex() 
@@ -106,9 +102,9 @@ class TerminalView():
         line_count = 0
         for line in solved_key_text_wrapped:
             if line_count == 0:
-                print(self.t.move(11 + line_count,4) + self.t.white_on_black(self.t.bold('Solved Key: ')) + self.t.green(self.t.bold(line)))
+                print(self.t.move(10 + line_count,4) + self.t.white_on_black(self.t.bold('Solved Key: ')) + self.t.green(self.t.bold(line)))
             else:
-                print(self.t.move(11 + line_count,4) + self.t.green(self.t.bold(line)))
+                print(self.t.move(10 + line_count,4) + self.t.green(self.t.bold(line)))
 
             line_count += 1
         current_block_text = str(len(self.cryptomg.solved_blocks) + 1)

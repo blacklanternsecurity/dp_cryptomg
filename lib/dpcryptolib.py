@@ -42,7 +42,7 @@ def is_valid_partial_key(partilKey):
 
 class CryptOMG():
 
-    def __init__(self,debug=False,url='',handler="DH",cookie=None,knownkey='',version=None,allmode=False,resume=None,length=48,terminal=None,mthlock=None):
+    def __init__(self,debug=False,url='',handler="DH",cookie=None,knownkey='',version=None,resume=None,length=48,terminal=None,mthlock=None):
     
         self.solved_blocks = []
         self.current_pos = 0
@@ -62,7 +62,6 @@ class CryptOMG():
         self.cookie = cookie
         self.knownkey = knownkey
         self.version = version
-        self.allmode = allmode
         self.resume = resume
         self.length = length
         self.exploit_url = ""
@@ -76,7 +75,6 @@ class CryptOMG():
                 self.solved_blocks = [ self.knownkey[i:i+4] for i in range(0, len( self.knownkey), 4)]
 
     def msgPrint(self,msg,style='normal'):
-      #  time.sleep(0.1)
 
         now = datetime.now()
         self.terminal.log_messages.append((msg,style,now.strftime("%H:%M:%S.%f")))
@@ -164,7 +162,7 @@ class CryptOMG():
         self.request_count += 1
         self.terminal.footer_draw()
         r = requests.get(fullurl,headers=headers,verify=False)
-      #  msgPrint(f"Sent version for version {version}. Resulting code: [{r.status_code}] Response Size: [{len(r.content)}] (Total request count: [{request_count}])")
+        self.msgPrint(f"Sent version for version {version}. Resulting code: [{r.status_code}] Response Size: [{len(r.content)}] (Total request count: [{self.request_count}])",style="debug")
         return r
 
     def solveBlock(self):
@@ -172,7 +170,6 @@ class CryptOMG():
         prefix = b"".join(self.solved_blocks)
         block = Block(self.url,prefix,self)
         block.find_baseline()
-        block.initialize_possible_values()
 
         self.current_pos = 1
         self.terminal.status_draw()
@@ -247,63 +244,6 @@ class Block():
         else:
             return 0
 
-
-
-
-    def initialize_possible_values(self):
-
-        if self.parent.allmode:
-            return
-
-        if self.pos1.solved:
-            self.pos1.possible_values = [self.pos1.solved]
-        elif self.baseline[0] == 0:
-            self.pos1.possible_values = list(bucket1Set)
-
-        elif self.baseline[0] == 107:
-            self.pos1.possible_values = bucket2Set
-        elif self.baseline[0] == 8:
-            self.pos1.possible_values = bucket3Set
-        else:
-            self.parent.msgPrint("Detector byte at pos [1] from baseline is invalid",style="error")
-            sys.exit()
-
-        if self.pos2.solved:
-            self.pos2.possible_values = [self.pos2.solved]
-        elif self.baseline[1] == 0:
-            self.pos2.possible_values = list(bucket1Set)
-        elif self.baseline[1] == 107:
-            self.pos2.possible_values = bucket2Set
-        elif self.baseline[1] == 8:
-            self.pos2.possible_values = bucket3Set
-        else:
-            self.parent.msgPrint("Detector byte at pos [2] from baseline is invalid",style="error")
-            sys.exit()
-
-
-        if self.pos3.solved:
-            self.pos3.possible_values = [self.pos2.solved]
-        elif self.baseline[2] == 0:
-            self.pos3.possible_values = list(bucket1Set)
-        elif self.baseline[2] == 107:
-            self.pos3.possible_values = bucket2Set
-        elif self.baseline[2] == 8:
-            self.pos3.possible_values = bucket3Set
-            self.parent.msgPrint("Detector byte at pos [3] from baseline is invalid",style="error")
-            sys.exit()
-
-        if self.pos4.solved:
-            self.pos4.possible_values = [self.pos4.solved]
-        elif self.baseline[3] == 0:
-            self.pos4.possible_values = list(bucket1Set)
-        elif self.baseline[3] == 107:
-            self.pos4.possible_values = bucket2Set
-        elif self.baseline[3] == 8:
-            self.pos4.possible_values = bucket3Set
-            self.parent.msgPrint("Detector byte at pos [4] from baseline is invalid",style="error")
-            sys.exit()
-
-      #  self.parent.msgPrint(f"Set possible values for positions based on baseline. POS1: [{len(self.pos1.possible_values)}] POS2: [{len(self.pos2.possible_values)}] POS3: [{len(self.pos3.possible_values)}] POS4: [{len(self.pos4.possible_values)}]")
 
     def equals_check_34(self):
         if self.baseline == b'\x00\x00\x00\x00':
@@ -401,18 +341,11 @@ class KeyPosition():
         self.solved = None
         self.pos = pos
         self.possible_values = []
-        if self.parent.parent.allmode:
-            for i in range(256):
-                self.possible_values.append(i)
 
-        else:
-            for s in string.printable:
-                self.possible_values.append(ord(s))
+        for s in string.printable:
+            self.possible_values.append(ord(s))
 
     def solve_byte(self):
-
-      #  if allmode:
-      #      self.parent.baseline = b'\x00\x00\x00\x00'
 
         if self.solved:
             self.parent.parent.msgPrint(f"Position is already solved with key byte {[self.solved]}, skipping to next byte")
@@ -456,16 +389,13 @@ class KeyPosition():
 
                         self.parent.parent.possible_values = self.possible_values
                         self.parent.parent.terminal.possible_values_draw()
-                     #   msgPrint(f"Reduced Possible key bytes for POS [1] to: [{len(self.possible_values)}]",style="success")
                         break
                     else:
                         self.parent.parent.msgPrint(f"Got negative results, cant trust it because of =...",style="debug")
 
                 if len(self.possible_values) == 1:
                     self.solved = self.possible_values[0]
-
-                         #   print(x)
-                   # self.parent.baseline[self.pos - 1] = 
+        
                     self.parent.parent.msgPrint(f"Solved Byte [{self.pos}]! Key byte is: [{self.solved}]",style="success")
                     break
         
