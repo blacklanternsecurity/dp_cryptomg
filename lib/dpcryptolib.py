@@ -1,6 +1,5 @@
 import re
 import sys
-import string
 import base64
 import requests
 import itertools
