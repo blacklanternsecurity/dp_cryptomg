@@ -21,7 +21,6 @@ def repeated_key_xor(pt, key):
         encoded.append(pt[i] ^ key[i % len_key])
     return bytes(encoded)
 
-
 def isB64Character(testByte):
     if ord(testByte) in b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+=":
         return True
@@ -30,15 +29,6 @@ def isB64Character(testByte):
 
 def is_hex(s):
     return re.fullmatch(r"^[0-9a-fA-F]$", s or "") is not None
-
-def is_valid_partial_key(partilKey):
-    if is_hex(partialKey):
-        if len(partialKey) % 8 == 0:
-            return True
-        else:
-            return False
-    else:
-        return False
 
 class CryptOMG():
 
@@ -223,14 +213,14 @@ class Block():
             else:
                 fullUrl = f'{str(self.url)}?dp={base64.b64encode((encryptedPrefix + randBytes)).decode()}'
 
-            r = requests.get(fullUrl,headers=headers,verify=False,proxies=self.proxies)
+            r = requests.get(fullUrl,headers=headers,verify=False,proxies=self.parent.proxies)
 
 
         elif self.parent.handler == "SP":
 
             fullUrl = f'{str(self.url)}'
             data = {"DictionaryLanguage":"en-US","Configuration":base64.b64encode((encryptedPrefix + randBytes)).decode()}
-            r = requests.post(fullUrl,headers=headers,data=data,verify=False,proxies=self.proxies)
+            r = requests.post(fullUrl,headers=headers,data=data,verify=False,proxies=self.parent.proxies)
 
         else:
             self.parent.msgPrint("Invalid Handler Type!",style="error")
