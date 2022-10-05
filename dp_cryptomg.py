@@ -61,6 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--version', help='Specify the Telerik version, if known', required = False)
     parser.add_argument('-l', '--length', help='The length of the key, if known', required = False)
     parser.add_argument('-p', '--proxy', help='Optionally set an HTTP proxy', required = False)
+    parser.add_argument('-s', '--simple', help='Turn on off the fancy interface', required = False, action='store_true')
 
     args = parser.parse_args()
     print(args)
@@ -108,6 +109,11 @@ if __name__ == '__main__':
         proxy = args.proxy
     else:
         proxy = None
+
+    if args.simple:
+        simple_mode = True
+    else:
+        simple_mode = False
 
     terminal = TerminalView()
 

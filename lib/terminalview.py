@@ -74,7 +74,6 @@ class TerminalView():
         print(self.t.move(4,4) + self.t.white_on_black(self.t.bold('Handler: ')) + self.t.slategray3(self.t.bold(handlerText)))
 
 
-
         if self.cryptomg.cookie: 
             cookieText = self.cryptomg.cookie
         else:
@@ -87,6 +86,13 @@ class TerminalView():
         else:
             debugText = "DISABLED"
         print(self.t.move(6,4) + self.t.white_on_black(self.t.bold('Debug: ')) + self.t.slategray3(self.t.bold(debugText)))
+
+        if self.cryptomg.proxy:
+            proxyText = self.cryptomg.proxy['http']
+        else:
+            proxyText = "DISABLED"
+        print(self.t.move(7,4) + self.t.white_on_black(self.t.bold('Proxy: ')) + self.t.slategray3(self.t.bold(proxyText)))
+
 
     def status_draw(self):
 
