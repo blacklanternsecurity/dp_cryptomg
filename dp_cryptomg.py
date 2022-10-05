@@ -7,7 +7,9 @@ from lib.simpleterminalview import *
 from argparse import ArgumentParser
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 
 class multiThreadHandler:
     def __init__(self, CO):
@@ -26,6 +28,7 @@ class multiThreadHandler:
         t.daemon = True
         t.start()
         return
+
 
 def main_usage():
 

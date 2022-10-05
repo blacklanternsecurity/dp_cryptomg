@@ -7,8 +7,10 @@ import itertools
 from lib.constants import *
 from datetime import datetime
 
+
 def byte_xor(ba1, ba2):
     return bytes([b1 ^ b2 for b1, b2 in zip(ba1, ba2)])
+
 
 def repeated_key_xor(pt, key):
 
@@ -18,14 +20,17 @@ def repeated_key_xor(pt, key):
         encoded.append(pt[i] ^ key[i % len_key])
     return bytes(encoded)
 
+
 def isB64Character(testByte):
     if ord(testByte) in b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+=":
         return True
     else:
         return False
 
+
 def is_hex(s):
     return re.fullmatch(r"^[0-9a-fA-F]$", s or "") is not None
+
 
 class CryptOMG:
     def __init__(
@@ -325,6 +330,7 @@ class Block:
         self.parent.msgPrint(f"Could not build a working baseline. Target may not be vulnerable.", style="error")
         self.parent.msgPrint(f"Try all character mode (-a) if currently in ASCII Printable mode", style="error")
         sys.exit()
+
 
 class KeyPosition:
     def __init__(self, pos, parent):

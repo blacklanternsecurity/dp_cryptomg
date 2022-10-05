@@ -2,8 +2,10 @@ import os
 import sys
 from colorama import Fore, Style
 
+
 def getScriptRoot():
     return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
 
 class SimpleTerminalView:
     def __init__(self, *a, **kw):
@@ -62,9 +64,9 @@ class SimpleTerminalView:
         self.msgprint("CONFIGURATION:")
 
         if self.super_simple:
-            self.msgprint("Running in SUPER SIMPLE mode (minimal output)",severity='success')
+            self.msgprint("Running in SUPER SIMPLE mode (minimal output)", severity="success")
         else:
-            self.msgprint("Running in SIMPLE mode (less output)",severity='success')
+            self.msgprint("Running in SIMPLE mode (less output)", severity="success")
         self.msgprint(f"URL: {self.cryptomg.url}")
         if self.cryptomg.handler == "DH":
             handlerText = "Telerik.Web.UI.DialogHandler.aspx"
