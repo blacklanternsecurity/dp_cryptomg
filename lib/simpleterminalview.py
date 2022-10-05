@@ -2,10 +2,8 @@ import os
 import sys
 from colorama import Fore, Style
 
-
 def getScriptRoot():
     return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
 
 class SimpleTerminalView:
     def __init__(self, *a, **kw):
@@ -61,13 +59,12 @@ class SimpleTerminalView:
 
     def config_draw(self):
 
-        # configuration
         self.msgprint("CONFIGURATION:")
 
         if self.super_simple:
-            self.msgprint("Running in SUPER SIMPLE mode (minimal output)")
+            self.msgprint("Running in SUPER SIMPLE mode (minimal output)",severity='success')
         else:
-            self.msgprint("Running in SIMPLE mode (less output)")
+            self.msgprint("Running in SIMPLE mode (less output)",severity='success')
         self.msgprint(f"URL: {self.cryptomg.url}")
         if self.cryptomg.handler == "DH":
             handlerText = "Telerik.Web.UI.DialogHandler.aspx"
@@ -82,7 +79,6 @@ class SimpleTerminalView:
             cookieText = "None"
 
         self.msgprint(f"Cookies added to request: {cookieText}")
-
         if self.cryptomg.debug:
             debugText = "ENABLED"
         else:
@@ -173,15 +169,12 @@ class SimpleTerminalView:
 
     def initial_draw(self):
         self.clear()
-
-        # header
         self.msgprint(
-            "dp_cryptOMG.py 0.1 - Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248) - @paulmmueller",
+            "dp_cryptOMG.py 0.1.0 - Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248) - @paulmmueller",
             severity="success",
         )
 
         self.config_draw()
         self.status_draw()
         self.log_messages_draw()
-
         self.detector_byte_draw()

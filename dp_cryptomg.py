@@ -1,16 +1,13 @@
-import time
 import sys
-from argparse import ArgumentParser
+import time
+import threading
 from lib.dpcryptolib import *
 from lib.terminalview import *
 from lib.simpleterminalview import *
-
-import threading
+from argparse import ArgumentParser
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-
 
 class multiThreadHandler:
     def __init__(self, CO):
@@ -30,7 +27,6 @@ class multiThreadHandler:
         t.start()
         return
 
-
 def main_usage():
 
     print("dp_cryptomg.py v0.1.0")
@@ -38,8 +34,6 @@ def main_usage():
     print("@paulmmueller\n")
     print("Black Lantern Security - https://www.blacklanternsecurity.com/")
 
-
-# CLI arguments
 
 if __name__ == "__main__":
 
@@ -62,8 +56,6 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    print(args)
-
     args, unknown = parser.parse_known_args()
 
     if args.help:
@@ -141,9 +133,7 @@ if __name__ == "__main__":
     if not simple_mode:
         mth = multiThreadHandler(CO)
         CO.mthlock = mth.lock
-
         terminal.t.init_window()
-
         with terminal.t.cbreak(), terminal.t.hidden_cursor():
             keypress = ""
             exit = False
@@ -163,7 +153,6 @@ if __name__ == "__main__":
                     + terminal.t.center("Press 'q' to confirm exit. Press any other key to continue").rstrip()
                 )
                 val = terminal.t.inkey()
-
                 if val.lower() == "q":
                     exit = True
             print(terminal.t.clear)
@@ -173,7 +162,7 @@ if __name__ == "__main__":
             terminal.cleanup()
             sys.exit()
     else:
-        terminal.initial_draw()
         if super_simple_mode:
             terminal.super_simple = True
+        terminal.initial_draw()
         CO.findKey()

