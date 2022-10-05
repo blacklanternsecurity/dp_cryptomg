@@ -78,27 +78,26 @@ class CryptOMG():
 
         
     def findKey(self):
-        try:
+   #     try:
+        if not self.finalkey:
+            while 1:
+                self.solveBlock()
+                if len(b''.join(self.solved_blocks)) == self.length:
+                    break
+             #   self.msgPrint("Current Key Progress: [" + b''.join(self.solved_blocks).hex() + "]",style="success")
+            
+            finalkey = b''.join(self.solved_blocks)
+            self.finalkey = finalkey
+            self.msgPrint("Found final key! [" + finalkey.hex() + "]",style="success")
+            self.findKeyComplete = True
+           # return finalkey
 
-            if not self.finalkey:
-                while 1:
-                    self.solveBlock()
-                    if len(b''.join(self.solved_blocks)) == self.length:
-                        break
-                 #   self.msgPrint("Current Key Progress: [" + b''.join(self.solved_blocks).hex() + "]",style="success")
-                
-                finalkey = b''.join(self.solved_blocks)
-                self.finalkey = finalkey
-                self.msgPrint("Found final key! [" + finalkey.hex() + "]",style="success")
-                self.findKeyComplete = True
-               # return finalkey
+        else:
+            self.msgPrint("Starting with known key, skipping to payload generation")
 
-            else:
-                self.msgPrint("Starting with known key, skipping to payload generation")
-
-            self.generate_payload()
-        except Exception as e:
-            self.msgPrint(e)
+        self.generate_payload()
+       # except Exception as e:
+       #     self.msgPrint(e,style="error")
 
     
     def generate_payload(self):
@@ -249,7 +248,7 @@ class Block():
 
             if (eq_probe_1 == 0) and (eq_probe_2 == 0):
                 self.pos4.solved = ord(b"=")
-                self.parent.msgPrint("Discovered [=] character in position 4",style="Success")
+                self.parent.msgPrint("Discovered [=] character in position 4",style="success")
 
                 # check for the super weird case of 3 and 4 being =. 4 being an ='s means its allowed in this position
                 if self.baseline[2] == 0:
@@ -258,7 +257,7 @@ class Block():
                     eq_probe_2 = self.sendProbe(b'\x00\x00\x02\x00')
                     if (eq_probe_1 == 0) and (eq_probe_2 == 0):
                         self.pos3.solved = ord(b"=")
-                        self.parent.msgPrint("Discovered [=] character in position 3",style="Success")
+                        self.parent.msgPrint("Discovered [=] character in position 3",style="success")
 
     def equals_check_3(self):
         eq_probe_1 = self.sendProbe(b'\x00\x00\x05\x00')
@@ -268,7 +267,7 @@ class Block():
         # These bytes all have = in bucket 1 but every non-printable character is out of AT LEAST of them. Only an = will produce a positive result for all 3. 
         if (eq_probe_1 == 1) and (eq_probe_2 == 1) and (eq_probe_3 == 1):
             self.pos3.solved = ord(b"=")
-            self.parent.msgPrint("Discovered [=] character in position 3",style="Success")
+            self.parent.msgPrint("Discovered [=] character in position 3",style="success")
 
     def equals_check_1(self):
         eq_probe_1 = self.sendProbe(b'\x05\x00\x00\x00')
@@ -278,7 +277,7 @@ class Block():
         # These bytes all have = in bucket 1 but every non-printable character is out of AT LEAST of them. Only an = will produce a positive result for all 3. 
         if (eq_probe_1 == 1) and (eq_probe_2 == 1) and (eq_probe_3 == 1):
             self.pos1.solved = ord(b"=")
-            self.parent.msgPrint("Discovered [=] character in position 1",style="Success")
+            self.parent.msgPrint("Discovered [=] character in position 1",style="success")
 
     def equals_check_2(self):
         eq_probe_1 = self.sendProbe(b'\x00\x05\x00\x00')
@@ -288,7 +287,7 @@ class Block():
         # These bytes all have = in bucket 1 but every non-printable character is out of AT LEAST of them. Only an = will produce a positive result for all 3. 
         if (eq_probe_1 == 1) and (eq_probe_2 == 1) and (eq_probe_3 == 1):
             self.pos2.solved = ord(b"=")
-            self.parent.msgPrint("Discovered [=] character in position 2",style="Success")
+            self.parent.msgPrint("Discovered [=] character in position 2",style="success")
 
     def equals_check(self):
         self.parent.msgPrint("Attempting to perform check for [=] character")

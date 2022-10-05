@@ -202,9 +202,6 @@ class TerminalView():
         print(self.t.move(21 + self.possible_values_size + 7,4) +  self.t.white(("█")) + progress_bar +  self.t.white(("█")))
 
     def exploit_url_draw(self):
-
-
-
     
         if ((self.cryptomg.handler == "SP" and self.cryptomg.findKeyComplete == True) or (self.cryptomg.handler == "DH" and self.cryptomg.exploit_url != '')):
             eu_width = int(self.t.width / 2) - 12

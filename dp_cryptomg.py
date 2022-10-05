@@ -5,6 +5,7 @@ import signal
 from argparse import ArgumentParser
 from lib.dpcryptolib import *
 from lib.terminalview import * 
+from lib.simpleterminalview import *
 
 import threading
 from queue import Queue
@@ -28,17 +29,13 @@ class multiThreadHandler():
     def do_work(self,CO):
         CO.findKey()
 
-    
     def run(self):
         
         t = threading.Thread(target=self.worker)
         t.daemon = True
         t.start()
-
         self.q.put(self.CO)
-
         return
-
 
 def main_usage():
 
@@ -62,6 +59,7 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--length', help='The length of the key, if known', required = False)
     parser.add_argument('-p', '--proxy', help='Optionally set an HTTP proxy', required = False)
     parser.add_argument('-s', '--simple', help='Turn on off the fancy interface', required = False, action='store_true')
+    parser.add_argument('-S', '--super-simple', help='Turn on off the fancy interface and show minimal output', required = False, action='store_true')
 
     args = parser.parse_args()
     print(args)
@@ -115,41 +113,59 @@ if __name__ == '__main__':
     else:
         simple_mode = False
 
-    terminal = TerminalView()
+    if args.super_simple:
+        simple_mode = True
+        super_simple_mode = True
+    else:
+        super_simple_mode = False
+
+
+    if not simple_mode:
+        terminal = TerminalView()
+    else:
+        terminal = SimpleTerminalView()
 
     CO = CryptOMG(debug=debug,url=args.url,handler=handler,cookie=cookie,knownkey=knownkey,version=version,length=keylength,proxy=proxy,terminal=terminal,mthlock=None)
     terminal.cryptomg = CO
 
-    mth = multiThreadHandler(CO)
-    CO.mthlock = mth.lock
 
-    terminal.t.init_window()
+    if not simple_mode:
+        mth = multiThreadHandler(CO)
+        CO.mthlock = mth.lock
 
-    with terminal.t.cbreak(), terminal.t.hidden_cursor():
-        keypress = ''
-        exit = False
-        mth_started = False
-        while exit == False:
-            while keypress != 'q':
-                if not mth_started:
-                    mth.run()
-                    mth_started = True
-                keypress = terminal.t.inkey(timeout=0)
-                terminal.initial_draw()
-                keypress = terminal.t.inkey(timeout=5)
+    
+        terminal.t.init_window()
+
+        with terminal.t.cbreak(), terminal.t.hidden_cursor():
             keypress = ''
-            terminal.clear()
-            print(terminal.t.move_y(terminal.t.height // 2) + terminal.t.center("Press 'q' to confirm exit. Press any other key to continue").rstrip())
-            val = terminal.t.inkey()
+            exit = False
+            mth_started = False
+            while exit == False:
+                while keypress != 'q':
+                    if not mth_started:
+                        mth.run()
+                        mth_started = True
+                    keypress = terminal.t.inkey(timeout=0)
+                    terminal.initial_draw()
+                    keypress = terminal.t.inkey(timeout=5)
+                keypress = ''
+                terminal.clear()
+                print(terminal.t.move_y(terminal.t.height // 2) + terminal.t.center("Press 'q' to confirm exit. Press any other key to continue").rstrip())
+                val = terminal.t.inkey()
 
-            if val.lower() == 'q':
-                exit = True
-        print(terminal.t.clear)
-        print(terminal.t.move_y(terminal.t.height // 2) + terminal.t.center("Exiting...").rstrip())
-        time.sleep(1)
-        print(terminal.t.clear)
-        terminal.cleanup()
-        sys.exit()
+                if val.lower() == 'q':
+                    exit = True
+            print(terminal.t.clear)
+            print(terminal.t.move_y(terminal.t.height // 2) + terminal.t.center("Exiting...").rstrip())
+            time.sleep(1)
+            print(terminal.t.clear)
+            terminal.cleanup()
+            sys.exit()
+    else:
+        terminal.initial_draw()
+        if super_simple_mode:
+            terminal.super_simple = True
+        CO.findKey()
 
 
 
