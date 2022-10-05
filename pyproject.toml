@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "dp_cryptomg"
+version = "0.1.0"
+description = "Exploit for CVE-2017-9248 capable of solving non-hex keys"
+authors = ["pmueller <paul.mueller@blacklanternsecurity.com>"]
+license = "GPL-3.0"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.28.1"
+blessed = "^1.19.1"
+colorama = "^0.4.5"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
