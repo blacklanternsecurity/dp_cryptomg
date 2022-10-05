@@ -19,4 +19,4 @@ jobs:
           pip install flake8
       - name: flake8
         run: |
-          flake8 --select F,E722 --ignore F403,F405,F541"
+          flake8 --select F,E722 --ignore F403,F405,F541
