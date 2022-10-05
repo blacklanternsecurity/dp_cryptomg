@@ -1,14 +1,11 @@
 import time
 import sys
-from datetime import datetime
-import signal
 from argparse import ArgumentParser
 from lib.dpcryptolib import *
 from lib.terminalview import * 
 from lib.simpleterminalview import *
 
 import threading
-from queue import Queue
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -18,13 +15,10 @@ class multiThreadHandler():
     def __init__(self,CO):
         self.CO = CO
         self.lock = threading.Lock()
-        self.q = Queue()
+
 
     def worker(self):
-        while True:
-            domain = self.q.get(CO)
-            self.do_work(CO)
-            self.q.task_done()
+        self.do_work(CO)
 
     def do_work(self,CO):
         CO.findKey()
@@ -34,12 +28,11 @@ class multiThreadHandler():
         t = threading.Thread(target=self.worker)
         t.daemon = True
         t.start()
-        self.q.put(self.CO)
         return
 
 def main_usage():
 
-    print("dp_cryptomg.py v1.0")
+    print("dp_cryptomg.py v0.1.0")
     print("Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248)")
     print("@paulmmueller\n")
     print("Black Lantern Security - https://www.blacklanternsecurity.com/")
@@ -133,7 +126,6 @@ if __name__ == '__main__':
         mth = multiThreadHandler(CO)
         CO.mthlock = mth.lock
 
-    
         terminal.t.init_window()
 
         with terminal.t.cbreak(), terminal.t.hidden_cursor():

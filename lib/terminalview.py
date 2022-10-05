@@ -2,10 +2,9 @@
 from blessed import Terminal
 try:
     import cursor
-except:
+except ModuleNotFoundError:
     cursor = None
 import signal
-import string
 import os
 
 def getScriptRoot():
@@ -60,8 +59,6 @@ class TerminalView():
 
 
     def config_draw(self):
-
-        url = 'temp'
 
         # configuration
         print(self.t.move(2,4) + self.t.white_on_black(self.t.bold('CONFIGURATION:')))
@@ -136,7 +133,6 @@ class TerminalView():
         limit = 30
         log_width = int(self.t.width / 2)- 16
         processed_logs = []
-        at_limit = False
         if len(self.log_messages) > 0:
 
             for i in reversed(self.log_messages):

@@ -1,8 +1,6 @@
-import signal
-import string
 import os
-from colorama import Fore, Back, Style 
-from datetime import datetime
+import sys
+from colorama import Fore, Style 
 
 def getScriptRoot():
     return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -67,7 +65,6 @@ class SimpleTerminalView():
 
     def config_draw(self):
 
-        url = 'temp'
         # configuration
         self.msgprint('CONFIGURATION:')
 
@@ -161,7 +158,7 @@ class SimpleTerminalView():
                 f.close()
                 output_message += f"Key saved to {filename_key}"
             except Exception as e:
-                output_message += f"Failed to save key! ({FORE.red}{e}{Style.RESET_ALL})"
+                output_message += f"Failed to save key! ({Fore.red}{e}{Style.RESET_ALL})"
 
             if self.cryptomg.handler == "SP":
 
@@ -178,7 +175,7 @@ class SimpleTerminalView():
                     self.msgprint(f'Exploit URL saved to: {filename_exploit}',severity="success")
 
                 except Exception as e:
-                    output_message += f"Failed to save exploit URL! ({FORE.red}{e}{Style.RESET_ALL})"
+                    output_message += f"Failed to save exploit URL! ({Fore.red}{e}{Style.RESET_ALL})"
 
                 self.msgprint(output_message,severity="success")
 
