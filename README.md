@@ -18,9 +18,13 @@ Example (Basic usage):
 
 
 ```
-python3 dp_crypto.py -u http://example.com/Telerik.Web.UI.DialogHandler.aspx
+python3 dp_crypto.py http://example.com/Telerik.Web.UI.DialogHandler.aspx
 ```
+Example (Setting custom key length and using a proxy)
 
+```
+python3 dp_crypto.py -l 40 -p http://127.0.0.1:8080  http://example.com/Telerik.Web.UI.DialogHandler.aspx
+```
 
 usage: dp_cryptomg.py [-h] [-d] [-c COOKIE] [-k KNOWN_KEY] [-v VERSION] [-l LENGTH] [-p PROXY] [-s] [-S] url
 
