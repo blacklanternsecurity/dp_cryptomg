@@ -108,7 +108,7 @@ class CryptOMG:
             else:
                 self.msgPrint("Starting with known key, skipping to payload generation")
             self.generate_payload()
-        except WindowQuitException as e:
+        except WindowQuitException:
             return
 
     def generate_payload(self):
@@ -326,7 +326,7 @@ class Block:
 
             if self.sendProbe(b"".join(i)):
                 self.baseline = b"".join(i)
-                self.parent.msgPrint(f"Found detector byte baseline: [{self.baseline}]", style="success")
+                self.parent.msgPrint(f"Found detector byte baseline: [{self.baseline}]")
 
                 self.equals_check()
                 return
