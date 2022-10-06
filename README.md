@@ -53,6 +53,7 @@ optional arguments:
 
 # Important Notes
 - If they key length is not the default length of 48, you must manually specify the length with the -l parameter
+- If you experience issues with the "fancy" interface, you can disable it with the -s or -S options. This will also slightly increase the speed of the exploitation process.
 
 # References
 
