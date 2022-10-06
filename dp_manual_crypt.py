@@ -3,16 +3,15 @@
 import sys
 import logging
 import binascii
-import requests
 import urllib.parse
 from base64 import b64encode, b64decode
-from argparse import ArgumentParser, RawDescriptionHelpFormatter
-from urllib3.exceptions import InsecureRequestWarning
+from argparse import ArgumentParser
 
 log = None
 
+
 def init_logging(log_level):
-    formatter = logging.Formatter(fmt='%(levelname)s - %(module)s - %(msg)s')
+    formatter = logging.Formatter(fmt="%(levelname)s - %(module)s - %(msg)s")
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     handler.setLevel(log_level)
@@ -21,8 +20,9 @@ def init_logging(log_level):
     logger.setLevel(log_level)
     logger.addHandler(handler)
 
-    logger.debug('Logging initialized')
+    logger.debug("Logging initialized")
     return logger
+
 
 class ConfigParameter:
     key = None
@@ -31,7 +31,7 @@ class ConfigParameter:
     _value = None
     encoded = None
 
-    def __init__(self, params = None):
+    def __init__(self, params=None):
         if params is not None:
             p = params.split(b",")
             self.key = p[0].decode()
@@ -63,10 +63,11 @@ class ConfigParameter:
 
 def repeated_key_xor(pt, key):
     len_key = len(key)
-    encoded = []  
+    encoded = []
     for i in range(0, len(pt)):
         encoded.append(pt[i] ^ key[i % len_key])
     return bytes(encoded)
+
 
 def main():
     global log
@@ -100,12 +101,12 @@ def main():
                 params[new_param.key] = new_param
                 log.debug(f"Added parameter: {str(new_param)}")
 
-        param_str = ";".join([ str(params[p]) for p in params.keys() ])
+        param_str = ";".join([str(params[p]) for p in params.keys()])
         log.debug("Encrypting params:")
         for p in params.values():
             log.debug(f"  {p}")
 
-        new_ciphertext = b64encode(repeated_key_xor(b64encode(param_str.encode()),hexkey))
+        new_ciphertext = b64encode(repeated_key_xor(b64encode(param_str.encode()), hexkey))
         print(f"\n{urllib.parse.quote(new_ciphertext.decode())}")
 
     elif args.encrypt:
@@ -127,8 +128,8 @@ def main():
         plaintext = repeated_key_xor(b64decode(ciphertext), hexkey)
         print(f"\n{plaintext.decode()}")
 
-
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
