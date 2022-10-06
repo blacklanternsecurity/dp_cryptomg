@@ -35,14 +35,14 @@ def main_usage():
     print("dp_cryptomg.py v0.1.0")
     print("Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248)")
     print("@paulmmueller\n")
-    print("Black Lantern Security - https://www.blacklanternsecurity.com/")
+    print("Black Lantern Security - https://www.blacklanternsecurity.com/\n")
 
 
 if __name__ == "__main__":
 
-    parser = ArgumentParser(usage=main_usage(), add_help=False)
-    parser.add_argument("-u", "--url", help="Target ID", required=True)
-    parser.add_argument("-h", "--help", help="print the help screen and exit", required=False, action="store_true")
+    parser = ArgumentParser(usage=main_usage())
+    parser.add_argument("url", help="The target URL")
+    #   parser.add_argument("-h", "--help", help="print the help screen and exit", required=False, action="store_true")
     parser.add_argument("-d", "--debug", help="Enable debugging mode", required=False, action="store_true")
     parser.add_argument("-c", "--cookie", help="Add optional cookie header to every request", required=False)
     parser.add_argument("-k", "--known-key", help="The partial or complete known key, in HEX format", required=False)
@@ -58,13 +58,12 @@ if __name__ == "__main__":
         action="store_true",
     )
 
+    if len(sys.argv) < 2:
+        parser.print_help()
+        sys.exit(1)
+
     args = parser.parse_args()
     args, unknown = parser.parse_known_args()
-
-    if args.help:
-        main_usage()
-        parser.print_help()
-        sys.exit()
 
     if "Telerik.Web.UI.DialogHandler.aspx" in args.url:
         handler = "DH"
@@ -149,8 +148,10 @@ if __name__ == "__main__":
                     keypress = terminal.t.inkey(timeout=0)
                     terminal.initial_draw()
                     keypress = terminal.t.inkey(timeout=5)
+                mth.CO.kill = True
                 keypress = ""
-                terminal.clear()
+                time.sleep(0.6)
+                print(terminal.t.clear)
                 print(
                     terminal.t.move_y(terminal.t.height // 2)
                     + terminal.t.center("Press 'q' to confirm exit. Press any other key to continue").rstrip()

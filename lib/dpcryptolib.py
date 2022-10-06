@@ -31,6 +31,10 @@ def is_hex(s):
     return re.fullmatch(r"^[0-9a-fA-F]$", s or "") is not None
 
 
+class WindowQuitException(Exception):
+    pass
+
+
 class CryptOMG:
     def __init__(
         self,
@@ -67,6 +71,7 @@ class CryptOMG:
         self.length = length
         self.exploit_url = ""
         self.findKeyComplete = False
+        self.kill = False
 
         if proxy:
             self.proxy = {"http": proxy, "https": proxy}
@@ -103,8 +108,8 @@ class CryptOMG:
             else:
                 self.msgPrint("Starting with known key, skipping to payload generation")
             self.generate_payload()
-        except Exception as e:
-            self.msgPrint(e, style="error")
+        except WindowQuitException as e:
+            return
 
     def generate_payload(self):
 
@@ -342,6 +347,9 @@ class KeyPosition:
             self.possible_values.append(i)
 
     def solve_byte(self):
+
+        if self.parent.parent.kill:
+            raise WindowQuitException
 
         if self.solved:
             self.parent.parent.msgPrint(
