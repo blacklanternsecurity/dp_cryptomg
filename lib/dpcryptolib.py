@@ -331,8 +331,7 @@ class Block:
                 self.equals_check()
                 return
 
-        self.parent.msgPrint(f"Could not build a working baseline. Target may not be vulnerable.", style="error")
-        self.parent.msgPrint(f"Try all character mode (-a) if currently in ASCII Printable mode", style="error")
+        self.parent.msgPrint(f"Could not build a working baseline. Target is likely not be vulnerable.", style="error")
         sys.exit()
 
 
