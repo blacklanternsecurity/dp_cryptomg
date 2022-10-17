@@ -74,10 +74,13 @@ def main():
     key = "DEADBEEFDEADBEEFDEADBEEFDEADBEEF"
     parser = ArgumentParser(__file__, description="Description")
     parser.add_argument("-v", action="store_true", dest="verbose", help="Enable verbose logging")
-    parser.add_argument("-d", "--decrypt", metavar="B64", help="String to decrypt to Base64")
-    parser.add_argument("-D", "--decrypt-raw", metavar="B64", help="String to decrypt to plaintext")
-    parser.add_argument("-e", "--encrypt", metavar="RAW", help="Plaintext string to encrypt")
-    parser.add_argument("-E", "--encrypt-b64", metavar="B64", help="Base64 string to encrypt")
+    parser.add_argument("-d", "--decrypt", metavar="B64", \
+                        help="Decrypt Base64-encoded block using the specified key")
+
+#   parser.add_argument("-d", "--decrypt", metavar="B64", help="String to decrypt to Base64")
+#   parser.add_argument("-D", "--decrypt-raw", metavar="B64", help="String to decrypt to plaintext")
+#   parser.add_argument("-e", "--encrypt", metavar="RAW", help="Plaintext string to encrypt")
+#   parser.add_argument("-E", "--encrypt-b64", metavar="B64", help="Base64 string to encrypt")
     parser.add_argument("-k", "--key", default=key, help=f"Encryption key (default: {key})")
     parser.add_argument("--set", nargs="+", metavar="PARAM", help="Add a parameter")
     args = parser.parse_args()
@@ -89,44 +92,45 @@ def main():
     if args.decrypt:
         params = {}
         plaintext = bytes(repeated_key_xor(b64decode(urllib.parse.unquote(args.decrypt)), hexkey))
+        log.debug(f"Decrypted string: {b64decode(plaintext)}")
         decrypted_params = b64decode(plaintext).split(b";")
         for p in decrypted_params:
             param = ConfigParameter(p)
             params[param.key] = param
+            print(p)
 
-        log.info(f"Decrypted string: {b64decode(plaintext)}")
-        if args.set:
-            for a in args.set:
-                new_param = ConfigParameter(a.encode())
-                params[new_param.key] = new_param
-                log.debug(f"Added parameter: {str(new_param)}")
+#       if args.set:
+#           for a in args.set:
+#               new_param = ConfigParameter(a.encode())
+#               params[new_param.key] = new_param
+#               log.debug(f"Added parameter: {str(new_param)}")
 
-        param_str = ";".join([str(params[p]) for p in params.keys()])
-        log.debug("Encrypting params:")
-        for p in params.values():
-            log.debug(f"  {p}")
+#       param_str = ";".join([str(params[p]) for p in params.keys()])
+#       log.debug("Encrypting params:")
+#       for p in params.values():
+#           log.debug(f"  {p}")
 
-        new_ciphertext = b64encode(repeated_key_xor(b64encode(param_str.encode()), hexkey))
-        print(f"\n{urllib.parse.quote(new_ciphertext.decode())}")
+#       new_ciphertext = b64encode(repeated_key_xor(b64encode(param_str.encode()), hexkey))
+#       print(f"\n{urllib.parse.quote(new_ciphertext.decode())}")
 
-    elif args.encrypt:
-        log.debug(f"Encrypting string {args.encrypt}")
-        ciphertext = b64encode(repeated_key_xor(args.encrypt.encode(), hexkey)).decode()
-        log.debug(f"Base64 encoded: {ciphertext}")
-        print(f"\n{urllib.parse.quote(ciphertext)}")
+#   elif args.encrypt:
+#       log.debug(f"Encrypting string {args.encrypt}")
+#       ciphertext = b64encode(repeated_key_xor(args.encrypt.encode(), hexkey)).decode()
+#       log.debug(f"Base64 encoded: {ciphertext}")
+#       print(f"\n{urllib.parse.quote(ciphertext)}")
 
-    elif args.encrypt_b64:
-        log.debug(f"Encrypting string {args.encrypt_b64}")
-        plaintext = b64decode(args.encrypt_b64)
-        ciphertext = b64encode(repeated_key_xor(plaintext, hexkey)).decode()
-        log.debug(f"Base64 encoded: {ciphertext}")
-        print(f"\n{urllib.parse.quote(ciphertext)}")
+#   elif args.encrypt_b64:
+#       log.debug(f"Encrypting string {args.encrypt_b64}")
+#       plaintext = b64decode(args.encrypt_b64)
+#       ciphertext = b64encode(repeated_key_xor(plaintext, hexkey)).decode()
+#       log.debug(f"Base64 encoded: {ciphertext}")
+#       print(f"\n{urllib.parse.quote(ciphertext)}")
 
-    elif args.decrypt_raw:
-        ciphertext = urllib.parse.unquote(args.decrypt_raw)
-        log.debug(f"Decrypting string {ciphertext}")
-        plaintext = repeated_key_xor(b64decode(ciphertext), hexkey)
-        print(f"\n{plaintext.decode()}")
+#   elif args.decrypt_raw:
+#       ciphertext = urllib.parse.unquote(args.decrypt_raw)
+#       log.debug(f"Decrypting string {ciphertext}")
+#       plaintext = repeated_key_xor(b64decode(ciphertext), hexkey)
+#       print(f"\n{plaintext.decode()}")
 
     return 0
 
