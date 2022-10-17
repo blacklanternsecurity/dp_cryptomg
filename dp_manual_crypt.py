@@ -122,7 +122,7 @@ def decrypt_params(enc_params, hexkey):
 
 
 def init_parser():
-    key = "DEADBEEFDEADBEEFDEADBEEFDEADBEEF"
+    key = "663@aae)0d-7(b8@5-46#2*2-83$0a-fb&830^0de7~73b"
     parser = ArgumentParser(__file__, description="Description")
     parser.add_argument("-v", action="store_true", dest="verbose", help="Enable verbose logging")
     parser.add_argument("-d", "--decrypt", metavar="B64", help="Decrypt Base64-encoded block using the specified key")
