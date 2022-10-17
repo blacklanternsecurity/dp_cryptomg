@@ -1,4 +1,3 @@
-import pytest
 from dp_manual_crypt import *
 
 
@@ -38,8 +37,8 @@ def test_set():
     )
     params = decrypt_params(args.decrypt, args.key.encode())
     new_params = set_params(params, [ConfigParameter(p.encode()) for p in args.set])
-    assert params["foo"].param_type == 3
-    assert bool(params["foo"].value) == True
+    assert new_params["foo"].param_type == 3
+    assert bool(new_params["foo"].value) == True
 
 
 def test_encrypt():
