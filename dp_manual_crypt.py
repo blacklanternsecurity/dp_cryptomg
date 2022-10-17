@@ -72,8 +72,10 @@ def repeated_key_xor(pt, key):
         encoded.append(pt[i] ^ key[i % len_key])
     return bytes(encoded)
 
+
 class DecryptError(binascii.Error):
     pass
+
 
 def set_params(orig_params, new_params):
     for p in new_params:
@@ -83,6 +85,7 @@ def set_params(orig_params, new_params):
             log.debug(f"Adding new parameter {p.key}")
         orig_params[p.key] = p
     return orig_params
+
 
 def encrypt_params(params, hexkey):
     param_str = ";".join([str(params[p]) for p in params.keys()])
@@ -94,6 +97,7 @@ def encrypt_params(params, hexkey):
     newl = ""
     newl = log.level
     return f"{newl}{urllib.parse.quote(new_ciphertext.decode())}"
+
 
 def decrypt_params(enc_params, hexkey):
     params = {}
@@ -116,16 +120,17 @@ def decrypt_params(enc_params, hexkey):
         log.warning("Could not decrypt parameters. Incorrect key?")
         return {}
 
+
 def init_parser():
     key = "DEADBEEFDEADBEEFDEADBEEFDEADBEEF"
     parser = ArgumentParser(__file__, description="Description")
     parser.add_argument("-v", action="store_true", dest="verbose", help="Enable verbose logging")
-    parser.add_argument("-d", "--decrypt", metavar="B64", \
-                        help="Decrypt Base64-encoded block using the specified key")
+    parser.add_argument("-d", "--decrypt", metavar="B64", help="Decrypt Base64-encoded block using the specified key")
     parser.add_argument("-e", "--encrypt", metavar="RAW", help="Plaintext string to encrypt")
     parser.add_argument("-k", "--key", default=key, help=f"Encryption key (default: {key})")
     parser.add_argument("-s", "--set", nargs="+", metavar="PARAM", help="Add a parameter")
     return parser
+
 
 def main():
     global log
@@ -140,7 +145,7 @@ def main():
         params = decrypt_params(args.decrypt, hexkey)
 
         if args.set:
-            new_params = set_params(params, [ ConfigParameter(p.encode()) for p in args.set ])
+            new_params = set_params(params, [ConfigParameter(p.encode()) for p in args.set])
             encrypted = encrypt_params(new_params, hexkey)
             print(encrypted)
 
@@ -153,7 +158,7 @@ def main():
         encrypted = encrypt_params(params, hexkey)
 
         if args.set:
-            new_params = set_params(params, [ ConfigParameter(p.encode()) for p in args.set ])
+            new_params = set_params(params, [ConfigParameter(p.encode()) for p in args.set])
             encrypted = encrypt_params(new_params, hexkey)
 
         print(encrypted)

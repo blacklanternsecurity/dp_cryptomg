@@ -1,6 +1,7 @@
 import pytest
 from dp_manual_crypt import *
 
+
 def test_config_parameter():
     param = ConfigParameter(b"foo,False,3,True")
     assert param.key == "foo"
@@ -11,35 +12,46 @@ def test_config_parameter():
     assert param.value_raw == b"bar"
     assert param.encoded == True
 
+
 def test_decrypt():
     parser = init_parser()
-    args = parser.parse_args(["-k", "DEADBEEF", "-d", 
-                              "Hih4Mg4AHy4mDQ8oDgEANR0oBz0Ndw8uISw5AxsSPTweFjY%2BDgMXPyASFHk%3D"])
+    args = parser.parse_args(
+        ["-k", "DEADBEEF", "-d", "Hih4Mg4AHy4mDQ8oDgEANR0oBz0Ndw8uISw5AxsSPTweFjY%2BDgMXPyASFHk%3D"]
+    )
 
     params = decrypt_params(args.decrypt, args.key.encode())
     assert "foo" in params.keys()
     assert str(params["foo"]) == "foo,False,1,bar"
 
+
 def test_set():
     parser = init_parser()
-    args = parser.parse_args(["-k", "DEADBEEF", "-d", 
-                              "Hih4Mg4AHy4mDQ8oDgEANR0oBz0Ndw8uISw5AxsSPTweFjY%2BDgMXPyASFHk%3D",
-                              "-s", "foo,False,3,True"])
+    args = parser.parse_args(
+        [
+            "-k",
+            "DEADBEEF",
+            "-d",
+            "Hih4Mg4AHy4mDQ8oDgEANR0oBz0Ndw8uISw5AxsSPTweFjY%2BDgMXPyASFHk%3D",
+            "-s",
+            "foo,False,3,True",
+        ]
+    )
     params = decrypt_params(args.decrypt, args.key.encode())
-    new_params = set_params(params, [ ConfigParameter(p.encode()) for p in args.set ])
+    new_params = set_params(params, [ConfigParameter(p.encode()) for p in args.set])
     assert params["foo"].param_type == 3
     assert bool(params["foo"].value) == True
 
+
 def test_encrypt():
     parser = init_parser()
-    args = parser.parse_args(["-k", "DEADBEEF", "-e", 
-                              "foo,False,3,True"])
+    args = parser.parse_args(["-k", "DEADBEEF", "-e", "foo,False,3,True"])
     params = {}
     for p in args.encrypt.split(";"):
         param = ConfigParameter(p.encode())
         params[param.key] = param
     encrypted = encrypt_params(params, args.key.encode())
     assert encrypted == "40Hih4Mg4AHy4mDQ8oDgEINRINC3UYFHh7"
+
 
 def test_xor():
     xor = repeated_key_xor(b"Zm9vLEZhbHNlLDMsVHJ1ZQ==", b"DEADBEEF")
