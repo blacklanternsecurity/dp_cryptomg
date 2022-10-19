@@ -5,7 +5,7 @@
 
 Another tool for exploiting CVE-2017-9248, a cryptographic weakness in Telerik UI for ASP.NET AJAX dialog handler. Exploitation leads to access to a file manager utility capable up uploading arbitrary files, usually leading to remote code execution.
 
-The vulnerability is caused by an information leak via error messages during decryption of the Telerik "DialogParameters", which are a series of encrypted configuration values. These values are provided to the user, and then echoed back to the server as user-input. The leaked info about the decryption process allow for systemtic discovery of the `Telerik.Web.UI.DialogParametersEncryptionKey`. For a deep-dive into the vulnerability and how the tool works, visit our blog post at: LINK HERE.
+The vulnerability is caused by an information leak via error messages during decryption of the Telerik "DialogParameters", which are a series of encrypted configuration values. These values are provided to the user, and then echoed back to the server as user-input. The leaked info about the decryption process allow for systemtic discovery of the `Telerik.Web.UI.DialogParametersEncryptionKey`. For a deep-dive into the vulnerability and how the tool works, visit our blog post at: [https://blog.blacklanternsecurity.com/p/yet-another-telerik-ui-revisit](https://blog.blacklanternsecurity.com/p/yet-another-telerik-ui-revisit).
 
 ![dp_cryptomg_Trim](https://user-images.githubusercontent.com/24899338/193930865-20e6ac1e-fdeb-4435-8415-fda74e2ade05.gif)
 
