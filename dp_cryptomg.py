@@ -49,11 +49,11 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--version", help="Specify the Telerik version, if known", required=False)
     parser.add_argument("-l", "--length", help="The length of the key, if known", required=False)
     parser.add_argument("-p", "--proxy", help="Optionally set an HTTP proxy", required=False)
-    parser.add_argument("-s", "--simple", help="Turn on off the fancy interface", required=False, action="store_true")
+    parser.add_argument("-s", "--simple", help="Turn off the fancy interface", required=False, action="store_true")
     parser.add_argument(
         "-S",
         "--super-simple",
-        help="Turn on off the fancy interface and show minimal output",
+        help="Turn off the fancy interface and show minimal output",
         required=False,
         action="store_true",
     )
