@@ -302,7 +302,7 @@ class TerminalView:
             + self.t.white_on_green(
                 self.t.center(
                     self.t.bold(
-                        "dp_cryptOMG.py 0.1 - Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248) - @paulmmueller"
+                        "dp_cryptOMG.py 0.1 - Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248) - @paulmmueller @BlackLanternLLC"
                     )
                 )
             )
