@@ -48,8 +48,8 @@ optional arguments:
                         The length of the key, if known
   -p PROXY, --proxy PROXY
                         Optionally set an HTTP proxy
-  -s, --simple          Turn on off the fancy interface
-  -S, --super-simple    Turn on off the fancy interface and show minimal output
+  -s, --simple          Turn off the fancy interface
+  -S, --super-simple    Turn off the fancy interface and show minimal output
 ```
 
 # Features
