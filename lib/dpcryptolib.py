@@ -88,7 +88,7 @@ class CryptOMG:
     def msgPrint(self, msg, style="normal"):
 
         now = datetime.now()
-        self.terminal.log_messages.append((msg, style, now.strftime("%H:%M:%S.%f")))
+        self.terminal.log_messages.append((msg, style, now.strftime("%H:%M:%S")))
         self.terminal.log_messages_draw()
         return
 
@@ -109,6 +109,16 @@ class CryptOMG:
                 self.msgPrint("Starting with known key, skipping to payload generation")
             self.generate_payload()
         except WindowQuitException:
+            return
+
+        except requests.exceptions.ConnectionError as e:
+            self.msgPrint(f"Failed to connect to URL: [{self.url}]. aborting...", "error")
+            self.msgPrint(str(e), "debug")
+            return
+
+        except requests.exceptions.InvalidSchema as e:
+            self.msgPrint(f"Malformed URL: [{self.url}]. aborting...", "error")
+            self.msgPrint(str(e), "debug")
             return
 
     def generate_payload(self):
@@ -144,12 +154,13 @@ class CryptOMG:
 
             r = self.versionProbe(full_url, version)
             if r.status_code == 200 and b"Error" not in r.content:
-                self.msgPrint(f"Vulnerable component confirmed! Version is: {[version]}", style="success")
+                self.msgPrint(f"Vulnerable component confirmed! Version is: {[version][0]}", style="success")
                 self.exploit_url = full_url
                 self.terminal.exploit_url_draw()
                 return
 
         self.msgPrint(f"Could not confirm version!", style="error")
+        self.msgPrint(f"Consider trying a different key size", style="error")
         return
 
     def versionProbe(self, fullurl, version):
@@ -331,7 +342,7 @@ class Block:
                 self.equals_check()
                 return
 
-        self.parent.msgPrint(f"Could not build a working baseline. Target is likely not be vulnerable.", style="error")
+        self.parent.msgPrint(f"Could not build a working baseline. Target is likely not vulnerable.", style="error")
         sys.exit()
 
 

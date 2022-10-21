@@ -30,6 +30,15 @@ class multiThreadHandler:
         return
 
 
+def terminal_cleanup(terminal):
+    print(terminal.t.clear)
+    print(terminal.t.move_y(terminal.t.height // 2) + terminal.t.center("Exiting...").rstrip())
+    time.sleep(1)
+    print(terminal.t.clear)
+    terminal.cleanup()
+    sys.exit()
+
+
 def main_usage():
 
     print("dp_cryptomg.py v0.1.0")
@@ -159,12 +168,7 @@ if __name__ == "__main__":
                 val = terminal.t.inkey()
                 if val.lower() == "q":
                     exit = True
-            print(terminal.t.clear)
-            print(terminal.t.move_y(terminal.t.height // 2) + terminal.t.center("Exiting...").rstrip())
-            time.sleep(1)
-            print(terminal.t.clear)
-            terminal.cleanup()
-            sys.exit()
+            terminal_cleanup(terminal)
     else:
         if super_simple_mode:
             terminal.super_simple = True
