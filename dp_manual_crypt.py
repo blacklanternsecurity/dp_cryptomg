@@ -95,7 +95,6 @@ def encrypt_params(params, hexkey):
 
     new_ciphertext = b64encode(repeated_key_xor(b64encode(param_str.encode()), hexkey))
     newl = ""
-    newl = log.level
     return f"{newl}{urllib.parse.quote(new_ciphertext.decode())}"
 
 
@@ -116,8 +115,8 @@ def decrypt_params(enc_params, hexkey):
         print(f"{b64decode(plaintext).decode()}")
 
         return params
-    except binascii.Error:
-        log.warning("Could not decrypt parameters. Incorrect key?")
+    except binascii.Error as e:
+        log.warning(f"Could not decrypt parameters. Incorrect key? Error: {e}")
         return {}
 
 

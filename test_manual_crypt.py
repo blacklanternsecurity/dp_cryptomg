@@ -49,7 +49,7 @@ def test_encrypt():
         param = ConfigParameter(p.encode())
         params[param.key] = param
     encrypted = encrypt_params(params, args.key.encode())
-    assert encrypted == "40Hih4Mg4AHy4mDQ8oDgEINRINC3UYFHh7"
+    assert encrypted == "Hih4Mg4AHy4mDQ8oDgEINRINC3UYFHh7"
 
 
 def test_xor():
