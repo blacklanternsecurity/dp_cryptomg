@@ -172,7 +172,7 @@ class SimpleTerminalView:
     def initial_draw(self):
         self.clear()
         self.msgprint(
-            "dp_cryptOMG.py 0.1.0 - Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248) - @paulmmueller",
+            "dp_cryptOMG.py 0.1.2 - Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248) - @paulmmueller",
             severity="success",
         )
 
