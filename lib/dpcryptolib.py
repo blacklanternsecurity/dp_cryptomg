@@ -199,7 +199,7 @@ class CryptOMG:
         self.terminal.status_draw()
 
         solvedBlock = bytes([block.pos1.solved, block.pos2.solved, block.pos3.solved, block.pos4.solved])
-        self.msgPrint("Solved Block! Block Value: [" + solvedBlock.hex() + "]}", style="success")
+        self.msgPrint(f"Solved Block! Block Value: [{solvedBlock.hex()}]", style="success")
         self.solved_blocks.append(solvedBlock)
         self.terminal.progress_bar_draw()
 
@@ -260,53 +260,50 @@ class Block:
         else:
             return 0
 
+    # these five bytes work to detect an equals when it is allowed in a position
+    def equals_probe_set(self, pos):
+        base_probe = bytearray([0, 0, 0, 0])
+        eq_probe = []
+        equals_probe_bytes = [1, 2, 5, 22, 113]
+
+        for e in equals_probe_bytes:
+            base_probe[pos] = e
+            eq_probe.append(self.sendProbe(base_probe))
+
+        if (
+            (eq_probe[0] == 0)
+            and (eq_probe[1] == 0)
+            and (eq_probe[2] == 1)
+            and (eq_probe[3] == 1)
+            and (eq_probe[4] == 1)
+        ):
+            return True
+        return False
+
     def equals_check_34(self):
         if self.baseline == b"\x00\x00\x00\x00":
-
-            # these two bytes work to detect an equals when it is allowed in a position
-            eq_probe_1 = self.sendProbe(b"\x00\x00\x00\x01")
-            eq_probe_2 = self.sendProbe(b"\x00\x00\x00\x02")
-
-            if (eq_probe_1 == 0) and (eq_probe_2 == 0):
+            if self.equals_probe_set(3):
                 self.pos4.solved = ord(b"=")
                 self.parent.msgPrint("Discovered [=] character in position 4", style="success")
 
                 # check for the super weird case of 3 and 4 being =. 4 being an ='s means its allowed in this position
                 if self.baseline[2] == 0:
-
-                    eq_probe_1 = self.sendProbe(b"\x00\x00\x01\x00")
-                    eq_probe_2 = self.sendProbe(b"\x00\x00\x02\x00")
-                    if (eq_probe_1 == 0) and (eq_probe_2 == 0):
+                    if self.equals_probe_set(2):
                         self.pos3.solved = ord(b"=")
                         self.parent.msgPrint("Discovered [=] character in position 3", style="success")
 
     def equals_check_3(self):
-        eq_probe_1 = self.sendProbe(b"\x00\x00\x05\x00")
-        eq_probe_2 = self.sendProbe(b"\x00\x00\x12\x00")
-        eq_probe_3 = self.sendProbe(b"\x00\x00\x71\x00")
-
-        # These bytes all have = in bucket 1 but every non-printable character is out of AT LEAST of them. Only an = will produce a positive result for all 3.
-        if (eq_probe_1 == 1) and (eq_probe_2 == 1) and (eq_probe_3 == 1):
+        if self.equals_probe_set(2):
             self.pos3.solved = ord(b"=")
             self.parent.msgPrint("Discovered [=] character in position 3", style="success")
 
     def equals_check_1(self):
-        eq_probe_1 = self.sendProbe(b"\x05\x00\x00\x00")
-        eq_probe_2 = self.sendProbe(b"\x12\x00\x00\x00")
-        eq_probe_3 = self.sendProbe(b"\x71\x00\x00\x00")
-
-        # These bytes all have = in bucket 1 but every non-printable character is out of AT LEAST of them. Only an = will produce a positive result for all 3.
-        if (eq_probe_1 == 1) and (eq_probe_2 == 1) and (eq_probe_3 == 1):
+        if self.equals_probe_set(0):
             self.pos1.solved = ord(b"=")
             self.parent.msgPrint("Discovered [=] character in position 1", style="success")
 
     def equals_check_2(self):
-        eq_probe_1 = self.sendProbe(b"\x00\x05\x00\x00")
-        eq_probe_2 = self.sendProbe(b"\x00\x12\x00\x00")
-        eq_probe_3 = self.sendProbe(b"\x00\x71\x00\x00")
-
-        # These bytes all have = in bucket 1 but every non-printable character is out of AT LEAST of them. Only an = will produce a positive result for all 3.
-        if (eq_probe_1 == 1) and (eq_probe_2 == 1) and (eq_probe_3 == 1):
+        if self.equals_probe_set(1):
             self.pos2.solved = ord(b"=")
             self.parent.msgPrint("Discovered [=] character in position 2", style="success")
 
