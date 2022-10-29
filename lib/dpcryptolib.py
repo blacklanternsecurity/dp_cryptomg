@@ -199,7 +199,7 @@ class CryptOMG:
         self.terminal.status_draw()
 
         solvedBlock = bytes([block.pos1.solved, block.pos2.solved, block.pos3.solved, block.pos4.solved])
-        self.msgPrint("Solved Block! Block Value: [" + solvedBlock.hex() + "]}", style="success")
+        self.msgPrint(f"Solved Block! Block Value: [{solvedBlock.hex()}]", style="success")
         self.solved_blocks.append(solvedBlock)
         self.terminal.progress_bar_draw()
 
