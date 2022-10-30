@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import time
 import threading
@@ -41,7 +43,7 @@ def terminal_cleanup(terminal):
 
 def main_usage():
 
-    print("dp_cryptomg.py v0.1.2")
+    print("dp_cryptomg.py v0.1.3")
     print("Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248)")
     print("@paulmmueller\n")
     print("Black Lantern Security - https://www.blacklanternsecurity.com/\n")
