@@ -76,9 +76,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args, unknown = parser.parse_known_args()
 
-    if "Telerik.Web.UI.DialogHandler" in args.url:
+    if "Telerik.Web.UI.DialogHandler".lower() in args.url.lower():
         handler = "DH"
-    elif "Telerik.Web.UI.SpellCheckHandler" in args.url:
+    elif "Telerik.Web.UI.SpellCheckHandler".lower() in args.url.lower():
         handler = "SP"
     else:
         print("Invalid URL")
