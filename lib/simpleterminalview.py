@@ -14,9 +14,7 @@ class SimpleTerminalView:
         self.super_simple = False
 
     def msgprint(self, msg, time=None, severity="normal"):
-
         if self.super_simple == False:
-
             if severity == "normal":
                 msg_color = Fore.YELLOW
 
@@ -60,7 +58,6 @@ class SimpleTerminalView:
         pass
 
     def config_draw(self):
-
         self.msgprint("CONFIGURATION:")
 
         if self.super_simple:
@@ -94,7 +91,6 @@ class SimpleTerminalView:
         self.msgprint(f"Proxy: {proxyText}")
 
     def status_draw(self):
-
         solved_key_text = b"".join(self.cryptomg.solved_blocks).hex()
         if len(solved_key_text) > 0:
             self.msgprint("STATUS:")
@@ -108,13 +104,10 @@ class SimpleTerminalView:
             self.msgprint(f"Possible Values")
 
     def possible_values_draw(self):
-
         self.msgprint(" ".join([self.make_readable(x) for x in self.cryptomg.possible_values]))
 
     def log_messages_draw(self):
-
         while len(self.log_messages) > 0:
-
             log, severity, time = self.log_messages.pop(0)
             self.msgprint(log, time=time, severity=severity)
 
@@ -128,7 +121,6 @@ class SimpleTerminalView:
         pass
 
     def exploit_url_draw(self):
-
         if (self.cryptomg.handler == "SP" and self.cryptomg.findKeyComplete == True) or (
             self.cryptomg.handler == "DH" and self.cryptomg.exploit_url != ""
         ):
@@ -146,11 +138,9 @@ class SimpleTerminalView:
                 output_message += f"Failed to save key! ({Fore.red}{e}{Style.RESET_ALL})"
 
             if self.cryptomg.handler == "SP":
-
                 self.msgprint("SpellCheckHandler Endpoint can only be used to retrieve key", severity="error")
 
             elif self.cryptomg.handler == "DH":
-
                 self.msgprint(f"Exploit URL: {self.cryptomg.exploit_url}")
                 filename_exploit = f"{getScriptRoot()}/cryptomg_exploiturl_{host}.out"
                 try:
