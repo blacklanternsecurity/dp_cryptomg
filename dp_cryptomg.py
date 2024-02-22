@@ -25,7 +25,6 @@ class multiThreadHandler:
         CO.findKey()
 
     def run(self):
-
         t = threading.Thread(target=self.worker)
         t.daemon = True
         t.start()
@@ -42,7 +41,6 @@ def terminal_cleanup(terminal):
 
 
 def main_usage():
-
     print("dp_cryptomg.py v0.1.3")
     print("Telerik DialogHandler Weak Crypto Exploit (CVE-2017-9248)")
     print("@paulmmueller\n")
@@ -50,7 +48,6 @@ def main_usage():
 
 
 if __name__ == "__main__":
-
     parser = ArgumentParser(usage=main_usage())
     parser.add_argument("url", help="The target URL")
     #   parser.add_argument("-h", "--help", help="print the help screen and exit", required=False, action="store_true")
@@ -76,9 +73,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args, unknown = parser.parse_known_args()
 
-    if "Telerik.Web.UI.DialogHandler" in args.url:
+    if "Telerik.Web.UI.DialogHandler".lower() in args.url.lower():
         handler = "DH"
-    elif "Telerik.Web.UI.SpellCheckHandler" in args.url:
+    elif "Telerik.Web.UI.SpellCheckHandler".lower() in args.url.lower():
         handler = "SP"
     else:
         print("Invalid URL")

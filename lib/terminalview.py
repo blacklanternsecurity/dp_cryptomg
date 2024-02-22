@@ -56,7 +56,6 @@ class TerminalView:
         self.do_render()
 
     def config_draw(self):
-
         # configuration
         print(self.t.move(2, 4) + self.t.white_on_black(self.t.bold("CONFIGURATION:")))
         print(
@@ -107,7 +106,6 @@ class TerminalView:
         )
 
     def status_draw(self):
-
         # status
         print(self.t.move(9, 4) + self.t.white_on_black(self.t.bold("STATUS:")))
 
@@ -144,7 +142,6 @@ class TerminalView:
         print(self.t.move(16, 4) + self.t.white_on_black(self.t.bold("Possible Values")))
 
     def possible_values_draw(self):
-
         pv_width = int(self.t.width / 2) - 5
 
         for n in range(0, 10):
@@ -160,7 +157,6 @@ class TerminalView:
         log_width = int(self.t.width / 2) - 16
         processed_logs = []
         if len(self.log_messages) > 0:
-
             for i in reversed(self.log_messages):
                 render = None
                 log, severity, time = i
@@ -234,7 +230,6 @@ class TerminalView:
         )
 
     def exploit_url_draw(self):
-
         if (self.cryptomg.handler == "SP" and self.cryptomg.findKeyComplete == True) or (
             self.cryptomg.handler == "DH" and self.cryptomg.exploit_url != ""
         ):
@@ -254,7 +249,6 @@ class TerminalView:
                 output_message += self.t.red(f"Failed to save key! ({e})")
 
             if self.cryptomg.handler == "SP":
-
                 print(
                     self.t.move(39, int(self.t.width / 2) + 5)
                     + self.t.white_on_black(self.t.bold("Exploit URL:"))
@@ -262,7 +256,6 @@ class TerminalView:
                 )
 
             elif self.cryptomg.handler == "DH":
-
                 print(self.t.move(39, int(self.t.width / 2) + 5) + self.t.white_on_black(self.t.bold("Exploit URL:")))
 
                 filename_exploit = f"{getScriptRoot()}/cryptomg_exploiturl_{host}.out"
@@ -278,7 +271,6 @@ class TerminalView:
             wrapped_output_message = self.t.wrap(output_message, width=eu_width)
             line_count = 0
             for line in wrapped_output_message:
-
                 print(self.t.move(40 + line_count, int(self.t.width / 2) + 5) + self.t.white(self.t.bold(line)))
                 line_count += 1
 
