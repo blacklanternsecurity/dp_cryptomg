@@ -131,6 +131,8 @@ if __name__ == "__main__":
     if args.quick_check:
         quick_check = True
         simple_mode = True
+    else:
+        quick_check = False
 
     if not simple_mode:
         terminal = TerminalView()
