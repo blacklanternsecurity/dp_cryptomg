@@ -49,6 +49,7 @@ class CryptOMG:
         proxy=None,
         terminal=None,
         mthlock=None,
+        quick_check=False,
     ):
         self.solved_blocks = []
         self.current_pos = 0
@@ -71,6 +72,7 @@ class CryptOMG:
         self.exploit_url = ""
         self.findKeyComplete = False
         self.kill = False
+        self.quick_check = quick_check
 
         if proxy:
             self.proxy = {"http": proxy, "https": proxy}
@@ -176,6 +178,12 @@ class CryptOMG:
         prefix = b"".join(self.solved_blocks)
         block = Block(self.url, prefix, self)
         block.find_baseline()
+        if self.quick_check == True:
+            self.msgPrint(
+                "Baseline was successful. Target is likely vulnerable! (exiting due to quick check mode)",
+                style="success",
+            )
+            sys.exit()
 
         self.current_pos = 1
         self.terminal.status_draw()

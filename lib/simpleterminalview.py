@@ -12,6 +12,7 @@ class SimpleTerminalView:
         self.log_messages = []
         self.cryptomg = None
         self.super_simple = False
+        self.quick_check = kw.get("quick_check", False)
 
     def msgprint(self, msg, time=None, severity="normal"):
         if self.super_simple == False:
@@ -59,6 +60,9 @@ class SimpleTerminalView:
 
     def config_draw(self):
         self.msgprint("CONFIGURATION:")
+
+        if self.quick_check:
+            self.msgprint("Running in Quick Check mode. Key will not be solved.", severity="error")
 
         if self.super_simple:
             self.msgprint("Running in SUPER SIMPLE mode (minimal output)", severity="success")

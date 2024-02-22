@@ -50,6 +50,7 @@ optional arguments:
                         Optionally set an HTTP proxy
   -s, --simple          Turn off the fancy interface
   -S, --super-simple    Turn off the fancy interface and show minimal output
+  -q, --quick-check     Only detect likely vulnerability and skip exploitation (forces simple mode)
 ```
 
 # Features
