@@ -65,6 +65,13 @@ if __name__ == "__main__":
         required=False,
         action="store_true",
     )
+    parser.add_argument(
+        "-q",
+        "--quick-check",
+        help="Only detect likely vulnerability and skip exploitation (forces simple mode)",
+        required=False,
+        action="store_true",
+    )
 
     if len(sys.argv) < 2:
         parser.print_help()
@@ -121,10 +128,14 @@ if __name__ == "__main__":
     else:
         super_simple_mode = False
 
+    if args.quick_check:
+        quick_check = True
+        simple_mode = True
+
     if not simple_mode:
         terminal = TerminalView()
     else:
-        terminal = SimpleTerminalView()
+        terminal = SimpleTerminalView(quick_check=quick_check)
 
     CO = CryptOMG(
         debug=debug,
@@ -137,6 +148,7 @@ if __name__ == "__main__":
         proxy=proxy,
         terminal=terminal,
         mthlock=None,
+        quick_check=quick_check,
     )
     terminal.cryptomg = CO
 
