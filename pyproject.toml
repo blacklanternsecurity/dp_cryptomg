@@ -3,7 +3,7 @@ name = "dp_cryptomg"
 version = "0.1.0"
 description = "Exploit for CVE-2017-9248 capable of solving non-hex keys"
 authors = [{ name = "pmueller", email = "paul.mueller@blacklanternsecurity.com" }]
-license = "GPL-3.0"
+license = "AGPL-3.0-or-later"
 requires-python = ">=3.9"
 dependencies = [
     "requests>=2.28.1",

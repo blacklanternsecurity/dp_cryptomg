@@ -1,7 +1,7 @@
 # dp_cryptomg
 
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-![License](https://img.shields.io/badge/license-GPLv3-FF8400.svg)
+![License](https://img.shields.io/badge/license-AGPLv3-FF8400.svg)
 
 Another tool for exploiting CVE-2017-9248, a cryptographic weakness in Telerik UI for ASP.NET AJAX dialog handler. Exploitation leads to access to a file manager utility capable up uploading arbitrary files, usually leading to remote code execution.
 
