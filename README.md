@@ -1,7 +1,7 @@
 # dp_cryptomg
 
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-![License](https://img.shields.io/badge/license-GPLv3-FF8400.svg)
+![License](https://img.shields.io/badge/license-AGPLv3-FF8400.svg)
 
 Another tool for exploiting CVE-2017-9248, a cryptographic weakness in Telerik UI for ASP.NET AJAX dialog handler. Exploitation leads to access to a file manager utility capable up uploading arbitrary files, usually leading to remote code execution.
 
@@ -15,21 +15,36 @@ The vulnerability is caused by an information leak via error messages during dec
 
 * Research by SR Labs in their blog post [Achieving Telerik Remote Code Execution 100 Time Faster](https://www.srlabs.de/bites/telerik-100-times-faster) was the basis for the technique used in this tool and inspired us to create it
 
+# Installation
+
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
+
+```
+uv sync
+```
+
+You can then run the tool with `uv run`, or activate the environment (`.venv`) and run it directly with `python3`. If you prefer plain pip, a `requirements.txt` is also provided (`pip install -r requirements.txt`).
+
 # Usage
 
 Example (Basic usage):
 
 
 ```
-python3 dp_cryptomg.py http://example.com/Telerik.Web.UI.DialogHandler.aspx
+uv run dp_cryptomg.py http://example.com/Telerik.Web.UI.DialogHandler.aspx
 ```
 Example (Setting custom key length and using a proxy)
 
 ```
-python3 dp_cryptomg.py -l 40 -p http://127.0.0.1:8080  http://example.com/Telerik.Web.UI.DialogHandler.aspx
+uv run dp_cryptomg.py -l 40 -p http://127.0.0.1:8080  http://example.com/Telerik.Web.UI.DialogHandler.aspx
+```
+Example (Adding a 0.5 second delay between requests to avoid WAF rate limiting)
+
+```
+uv run dp_cryptomg.py --delay 0.5 http://example.com/Telerik.Web.UI.DialogHandler.aspx
 ```
 
-usage: dp_cryptomg.py [-h] [-d] [-c COOKIE] [-k KNOWN_KEY] [-v VERSION] [-l LENGTH] [-p PROXY] [-s] [-S] url
+usage: dp_cryptomg.py [-h] [-d] [-c COOKIE] [-k KNOWN_KEY] [-v VERSION] [-l LENGTH] [-p PROXY] [--delay DELAY] [-s] [-S] url
 
 ```
 positional arguments:
@@ -48,6 +63,7 @@ optional arguments:
                         The length of the key, if known
   -p PROXY, --proxy PROXY
                         Optionally set an HTTP proxy
+  --delay DELAY         Delay in seconds between each HTTP request to avoid WAF rate limiting (accepts decimals, e.g. 0.5)
   -s, --simple          Turn off the fancy interface
   -S, --super-simple    Turn off the fancy interface and show minimal output
   -q, --quick-check     Only detect likely vulnerability and skip exploitation (forces simple mode)
@@ -58,6 +74,7 @@ optional arguments:
 - Capable of recovering key from both the `Telerik.Web.UI.DialogHandler.aspx` and the `Telerik.Web.UI.SpellCheckHandler.axd` endpoints
 - Built in HTTP proxy support
 - Capable of adding a custom cookie header to each request
+- Optional per-request delay (`--delay`) to avoid tripping WAF rate limits
 
 # Important Notes
 - If they key length is not the default length of 48, you must manually specify the length with the -l parameter

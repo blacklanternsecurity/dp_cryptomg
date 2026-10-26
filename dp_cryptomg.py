@@ -57,6 +57,13 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--version", help="Specify the Telerik version, if known", required=False)
     parser.add_argument("-l", "--length", help="The length of the key, if known", required=False)
     parser.add_argument("-p", "--proxy", help="Optionally set an HTTP proxy", required=False)
+    parser.add_argument(
+        "--delay",
+        help="Delay in seconds between each HTTP request to avoid WAF rate limiting (accepts decimals, e.g. 0.5)",
+        required=False,
+        type=float,
+        default=0,
+    )
     parser.add_argument("-s", "--simple", help="Turn off the fancy interface", required=False, action="store_true")
     parser.add_argument(
         "-S",
@@ -151,6 +158,7 @@ if __name__ == "__main__":
         terminal=terminal,
         mthlock=None,
         quick_check=quick_check,
+        delay=args.delay,
     )
     terminal.cryptomg = CO
 

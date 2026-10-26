@@ -1,3 +1,5 @@
 .*.sw*
 __pycache__/
 Pipfile
+.venv/
+cryptomg_*.out

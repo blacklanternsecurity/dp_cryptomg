@@ -1,5 +1,6 @@
 import re
 import sys
+import time
 import base64
 import requests
 import itertools
@@ -50,6 +51,7 @@ class CryptOMG:
         terminal=None,
         mthlock=None,
         quick_check=False,
+        delay=0,
     ):
         self.solved_blocks = []
         self.current_pos = 0
@@ -73,6 +75,7 @@ class CryptOMG:
         self.findKeyComplete = False
         self.kill = False
         self.quick_check = quick_check
+        self.delay = delay
 
         if proxy:
             self.proxy = {"http": proxy, "https": proxy}
@@ -167,6 +170,8 @@ class CryptOMG:
             headers["cookie"] = self.cookie
         self.request_count += 1
         self.terminal.footer_draw()
+        if self.delay:
+            time.sleep(self.delay)
         r = requests.get(fullurl, headers=headers, verify=False, proxies=self.proxy)
         self.msgPrint(
             f"Sent version for version {version}. Resulting code: [{r.status_code}] Response Size: [{len(r.content)}] (Total request count: [{self.request_count}])",
@@ -226,6 +231,9 @@ class Block:
         headers = {}
         if self.parent.cookie:
             headers["cookie"] = self.parent.cookie
+
+        if self.parent.delay:
+            time.sleep(self.parent.delay)
 
         if self.parent.handler == "DH":
             if additionalParams:
